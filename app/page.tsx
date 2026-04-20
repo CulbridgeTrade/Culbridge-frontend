@@ -1,7 +1,7 @@
 "use client";
 
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
+
 import { Shield, Truck, Zap } from 'lucide-react';
 
 export default function Home() {
@@ -16,9 +16,9 @@ export default function Home() {
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
           <Link href="/dashboard">
-            <Button size="lg" className="text-lg px-8 py-3">
+            <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-lg px-8 py-3 h-12 bg-primary text-primary-foreground hover:bg-primary/90">
               Open Dashboard
-            </Button>
+            </button>
           </Link>
         </div>
         <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">

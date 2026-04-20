@@ -6,7 +6,7 @@
  */
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import api from "../src/lib/api";
+import api from "@/lib/api";
 
 const getToken = () => localStorage.getItem("culbridge_access_token") || "";
 const getShipments = async (filters) => {
