@@ -1,0 +1,1 @@
+- [x] 1. Verify/set remote origin to https://github.com/CulbridgeTrade/culbridge-frontend.git in culbridge-frontend/
