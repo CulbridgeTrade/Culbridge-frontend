@@ -19,7 +19,7 @@ export default function DashboardPage() {
       </div>
       <CulbridgeExporterDashboard 
         onNewShipment={() => setShowNewShipment(true)}
-        onResubmit={(id) => console.log('Resubmit', id)}
+        onResubmit={(id: string) => console.log('Resubmit', id)}
       />
     </div>
   )

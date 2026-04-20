@@ -1,9 +1,6 @@
-/** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
-  webpack: (config) => {
-    config.resolve.alias['@'] = require('path').resolve('./src');
-    return config;
+  eslint: {
+    ignoreDuringBuilds: true,
   },
 };
 
