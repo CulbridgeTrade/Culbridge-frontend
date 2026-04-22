@@ -1,4 +1,4 @@
-import { LayoutDashboard, Home } from 'lucide-react'
+import { LayoutDashboard, Home, Package } from 'lucide-react'
 import Link from 'next/link'
 
 
@@ -14,6 +14,10 @@ export function Sidebar() {
         <Link href="/dashboard" className="w-full justify-start flex h-10 px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50">
             <LayoutDashboard className="mr-2 h-4 w-4" />
             Dashboard
+          </Link>
+          <Link href="/shipment/new" className="w-full justify-start flex h-10 px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50">
+            <Package className="mr-2 h-4 w-4" />
+            New Shipment
           </Link>
       </nav>
     </div>

@@ -12,11 +12,11 @@
 - [x] 6. Create app/(auth)/login/page.tsx and signup/page.tsx
 
 - [x] 7. Create app/dashboard/layout.tsx and page.tsx (integrate CulbridgeExporterDashboard)
-- [x] 8. Create app/evaluate/page.tsx (shipment form + API)
+- [x] 8. Create app/evaluate/page.tsx (shipment form + API) [now /shipment/new]
 
-- [ ] 9. Create app/api/ proxy routes (auth, evaluate)
-- [ ] 10. Add shared components (Button, Input)
-- [ ] 11. Test: `npm run dev` - verify all routes/auth flow/backend integration
+- [x] 9. Create app/api/ proxy routes (auth, evaluate)
+- [x] 10. Add shared components (Button, Input)
+- [x] 11. Test: `npm run dev` - verify all routes/auth flow/backend integration
 - [ ] 12. Commit/push for Render deploy verification
 
 **Instructions:** After each completed step, mark [x] and update this file. Run `cd culbridge-frontend && npm run dev` after installs/edits.

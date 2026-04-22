@@ -178,8 +178,8 @@ const [filters, setFilters] = useState({ status: '', commodity: '', destination:
   return (
     <div className="culbridge-dashboard">
       {/* Header */}
-      <header className="dashboard-header">
-        <h1>Culbridge Exporter Dashboard</h1>
+<header className="dashboard-header">
+        <h1>Culbridge Exporter Dashboard &copy;2026 Culbridge</h1>
         <button onClick={onNewShipment} className="btn-new">
           + New Shipment
         </button>

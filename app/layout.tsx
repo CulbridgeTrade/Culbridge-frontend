@@ -37,6 +37,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                   >
                     Dashboard
                   </a>
+                  <Button variant="ghost" size="sm" asChild>
+                    <a href="/logout" className="hidden md:flex">
+                      Logout
+                    </a>
+                  </Button>
                 </nav>
               </div>
             </div>
