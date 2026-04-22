@@ -1,4 +1,4 @@
-import { Sidebar } from '../components/Sidebar'
+import { Sidebar } from '@/components/layout/Sidebar'
 import { ReactNode } from 'react'
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
@@ -11,4 +11,3 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
     </div>
   )
 }
-
