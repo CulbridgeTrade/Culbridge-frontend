@@ -27,10 +27,8 @@ function CulbridgeLogo({ size = 28 }: { size?: number }) {
 
 // ─── API ─────────────────────────────────────────────────────────────────────
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "https://culbridge.cloud";
-
 async function postLogin(email: string, password: string) {
-  const res = await fetch(`${API_BASE}/auth/login`, {
+  const res = await fetch(`/api/auth/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password }),

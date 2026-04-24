@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://culbridgetrade.onrender.com';
 
 const getToken = () => typeof window !== 'undefined' ? localStorage.getItem('culbridge_access_token') || '' : '';
 

@@ -54,7 +54,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <footer className="border-t bg-muted/40">
             <div className="container flex flex-col sm:flex-row py-8 md:py-12 mx-auto items-center justify-between">
               <p className="text-muted-foreground text-sm text-center">
-                © 2024 Culbridge. All rights reserved.
+                © 2026 Culbridge. All rights reserved.
               </p>
             </div>
           </footer>

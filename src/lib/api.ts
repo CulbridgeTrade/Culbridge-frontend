@@ -1,5 +1,3 @@
-'use client';
-
 export interface ShipmentData {
   exporterId?: string;
   commodity: string;

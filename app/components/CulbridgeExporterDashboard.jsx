@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * CulbridgeExporterDashboard.jsx
  * Production-ready React component.

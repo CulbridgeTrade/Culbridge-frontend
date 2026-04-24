@@ -4,6 +4,7 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     
+    // Set NEXT_PUBLIC_API_URL in Vercel to production backend URL (e.g., https://api.culbridge.cloud)
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
