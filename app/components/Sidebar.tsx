@@ -10,12 +10,14 @@ export function Sidebar() {
   const navItems = [
     { href: '/', icon: Home, label: 'Home', external: true },
     { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
+    { href: '/demo', icon: LayoutDashboard, label: 'Demo' },
     { href: '/shipment/new', icon: Package, label: 'New Shipment' },
     { href: '/evaluate', icon: FileCheck, label: 'Evaluate' },
   ]
 
   const isActive = (href: string) => {
     if (href === '/dashboard') return pathname === '/dashboard' || pathname.startsWith('/dashboard/')
+    if (href === '/demo') return pathname === '/demo' || pathname.startsWith('/demo/')
     return pathname === href || pathname.startsWith(`${href}/`)
   }
 
