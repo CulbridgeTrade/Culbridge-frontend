@@ -1,6 +1,12 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from 'react';
 
 interface User {
   id: string;
@@ -8,6 +14,13 @@ interface User {
   role: string;
   companyName?: string | null;
   tin?: string | null;
+}
+
+interface SignupData {
+  email: string;
+  password: string;
+  companyName?: string;
+  tin?: string;
 }
 
 interface AuthContextType {
@@ -20,32 +33,58 @@ interface AuthContextType {
   refreshUser: () => Promise<void>;
 }
 
-interface SignupData {
-  email: string;
-  password: string;
-  companyName?: string;
-  tin?: string;
-}
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
+if (!API_URL) {
+  throw new Error('NEXT_PUBLIC_API_URL is not defined');
+}
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+// -----------------------------
+// SAFE FETCH WRAPPER
+// -----------------------------
+async function safeFetch(url: string, options?: RequestInit) {
+  try {
+    const res = await fetch(url, {
+      ...options,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(options?.headers || {}),
+      },
+    });
+
+    const text = await res.text();
+
+    let data;
+    try {
+      data = text ? JSON.parse(text) : {};
+    } catch {
+      throw new Error('Invalid JSON response from server');
+    }
+
+    if (!res.ok) {
+      throw new Error(data?.error || data?.message || 'Request failed');
+    }
+
+    return data;
+  } catch (err: any) {
+    throw new Error(err.message || 'Network error');
+  }
+}
+
+// -----------------------------
+// PROVIDER
+// -----------------------------
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const refreshUser = useCallback(async () => {
     try {
-      const res = await fetch(`${API_URL}/api/auth/me`, {
-        credentials: 'include',
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setUser(data.user || null);
-      } else {
-        setUser(null);
-      }
+      const data = await safeFetch(`${API_URL}/api/auth/me`);
+      setUser(data.user || null);
     } catch {
       setUser(null);
     }
@@ -56,38 +95,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [refreshUser]);
 
   const login = async (email: string, password: string) => {
-    const res = await fetch(`${API_URL}/api/auth/login`, {
+    const data = await safeFetch(`${API_URL}/api/auth/login`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
       body: JSON.stringify({ email, password }),
     });
-    const data = await res.json();
-    if (!res.ok) {
-      throw new Error(data?.message ?? data?.error ?? 'Login failed');
-    }
-    setUser(data.user);
+
+    setUser(data.user || null);
   };
 
   const signup = async (payload: SignupData) => {
-    const res = await fetch(`${API_URL}/api/auth/signup`, {
+    const data = await safeFetch(`${API_URL}/api/auth/signup`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
       body: JSON.stringify(payload),
     });
-    const data = await res.json();
-    if (!res.ok) {
-      throw new Error(data?.message ?? data?.error ?? 'Signup failed');
-    }
-    setUser(data.user);
+
+    setUser(data.user || null);
   };
 
   const logout = async () => {
-    await fetch(`${API_URL}/api/auth/logout`, {
+    await safeFetch(`${API_URL}/api/auth/logout`, {
       method: 'POST',
-      credentials: 'include',
     });
+
     setUser(null);
   };
 
@@ -108,11 +137,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
+// -----------------------------
+// HOOK
+// -----------------------------
 export function useAuth() {
   const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+  if (!context) {
+    throw new Error('useAuth must be used within AuthProvider');
   }
   return context;
 }
-
