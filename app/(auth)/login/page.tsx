@@ -3,6 +3,7 @@
 import { useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useAuth } from "@/contexts/AuthContext";
 import "./../auth.css";
 
 function CulbridgeLogo({ size = 28 }: { size?: number }) {
@@ -24,19 +25,9 @@ function CulbridgeLogo({ size = 28 }: { size?: number }) {
   );
 }
 
-async function postLogin(email: string, password: string) {
-  const res = await fetch(`/api/auth/login`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, password }),
-  });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data?.message ?? data?.error ?? "Login failed");
-  return data as { token: string; user: { id: string; status: string } };
-}
-
 export default function LoginPage() {
   const router = useRouter();
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPw, setShowPw] = useState(false);
@@ -50,11 +41,9 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const data = await postLogin(email, password);
-      if (data?.token) {
-        document.cookie = `auth-token=${data.token}; path=/; SameSite=Lax; max-age=${60*60*24*30}`;
-      }
+      await login(email, password);
       router.push("/dashboard");
+      router.refresh();
     } catch (err: any) {
       setError(err.message ?? "Something went wrong. Try again.");
     } finally {
@@ -71,6 +60,7 @@ export default function LoginPage() {
             <span className="auth-panel-brand">
               <span className="brand-cul">Cul</span>
               <span className="brand-bridge">bridge</span>
+            </span>
           </div>
           <div className="auth-panel-body">
             <p className="auth-panel-tagline">
@@ -81,8 +71,9 @@ export default function LoginPage() {
             </p>
             <div className="auth-corridor">
               <div className="auth-flag-chip">NG Nigeria</div>
-              <span className="auth-arrow">-></span>
+              <span className="auth-arrow">{'->'}</span>
               <div className="auth-flag-chip">NL &amp; DE</div>
+            </div>
           </div>
           <div className="auth-panel-footer">
             <div className="auth-compliance-tags">
@@ -92,6 +83,7 @@ export default function LoginPage() {
               <span className="auth-tag">NAQS</span>
               <span className="auth-tag">NEPC</span>
             </div>
+          </div>
         </div>
       </aside>
 
@@ -163,6 +155,7 @@ export default function LoginPage() {
                   )}
                 </button>
               </div>
+            </div>
 
             <button className="auth-btn-primary" type="submit" disabled={loading || !email || !password}>
               {loading ? <><span className="auth-spinner" /> Signing in...</> : "Sign in ->"}
@@ -178,3 +171,4 @@ export default function LoginPage() {
     </div>
   );
 }
+
