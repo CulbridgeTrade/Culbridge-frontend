@@ -1,10 +1,16 @@
-import { NextResponse } from 'next/server';
-import { clearAuthCookie } from '@/lib/auth';
+import { NextResponse } from "next/server";
+
+export const dynamic = "force-dynamic";
 
 export async function POST() {
-  const cookie = clearAuthCookie();
   const res = NextResponse.json({ success: true });
-  res.cookies.set(cookie.name, cookie.value, cookie.options);
+  res.cookies.set("auth-token", "", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: 0,
+    path: "/",
+  });
   return res;
 }
 

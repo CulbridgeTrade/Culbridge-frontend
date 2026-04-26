@@ -1,26 +1,32 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { verifyPassword, signToken, setAuthCookie } from '@/lib/auth';
-import { users } from '@/lib/memory-store';
+import { pool } from "@/lib/db";
+import { comparePassword, signToken, setAuthCookie } from "@/lib/auth";
+import { NextResponse } from "next/server";
 
-export async function POST(req: NextRequest) {
+export const dynamic = "force-dynamic";
+
+export async function POST(req: Request) {
   try {
-    const body = await req.json();
-    const { email, password } = body;
+    const { email, password } = await req.json();
 
     if (!email || !password) {
-      return NextResponse.json({ error: 'Email and password required' }, { status: 400 });
+      return new Response("Missing fields", { status: 400 });
     }
 
-    const normalizedEmail = email.toLowerCase().trim();
-    const user = users.get(normalizedEmail);
+    const result = await pool.query(
+      "SELECT id, email, password_hash, role, company_name, tin FROM users WHERE email = $1",
+      [email.toLowerCase().trim()]
+    );
 
-    if (!user) {
-      return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
+    if (result.rows.length === 0) {
+      return new Response("Invalid credentials", { status: 401 });
     }
 
-    const valid = await verifyPassword(password, user.password_hash);
+    const user = result.rows[0];
+
+    const valid = await comparePassword(password, user.password_hash);
+
     if (!valid) {
-      return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
+      return new Response("Invalid credentials", { status: 401 });
     }
 
     const token = signToken({
@@ -32,6 +38,7 @@ export async function POST(req: NextRequest) {
     const cookie = setAuthCookie(token);
 
     const res = NextResponse.json({
+      token,
       user: {
         id: user.id,
         email: user.email,
@@ -43,8 +50,9 @@ export async function POST(req: NextRequest) {
 
     res.cookies.set(cookie.name, cookie.value, cookie.options);
     return res;
-  } catch (error) {
-    console.error('Login error:', error);
-    return NextResponse.json({ error: 'Login failed' }, { status: 500 });
+  } catch (err) {
+    console.error("Login error:", err);
+    return new Response("Server error", { status: 500 });
   }
 }
+
