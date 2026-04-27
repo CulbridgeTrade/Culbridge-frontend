@@ -10,7 +10,12 @@ interface TokenPayload {
 
 function verifyToken(token: string): TokenPayload | null {
   try {
-    return jwt.verify(token, process.env.JWT_SECRET!) as TokenPayload;
+    const secret = process.env.JWT_SECRET;
+    if (!secret) {
+      console.error("JWT_SECRET is not set. Authentication will fail.");
+      return null;
+    }
+    return jwt.verify(token, secret) as TokenPayload;
   } catch {
     return null;
   }

@@ -29,13 +29,23 @@ export async function comparePassword(password: string, hash: string) {
 // ============================================
 // JWT utilities
 // ============================================
+const getJwtSecret = (): string => {
+  const secret = process.env.JWT_SECRET;
+  if (!secret) {
+    throw new Error(
+      "JWT_SECRET is not set. Please set it in your environment variables."
+    );
+  }
+  return secret;
+};
+
 export function signToken(payload: any) {
-  return jwt.sign(payload, process.env.JWT_SECRET!, { expiresIn: "7d" });
+  return jwt.sign(payload, getJwtSecret(), { expiresIn: "7d" });
 }
 
 export function verifyToken(token: string): any | null {
   try {
-    return jwt.verify(token, process.env.JWT_SECRET!);
+    return jwt.verify(token, getJwtSecret());
   } catch {
     return null;
   }
